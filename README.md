@@ -1,6 +1,6 @@
 # ChessFormer
 
-ChessFormer is a chess transformer engine developed by [@ncylich](https://github.com/ncylich) that leverages the power of transformer models trained on lichess datasets. Designed to simulate a player with an approximate Elo rating of 2000, ChessFormer provides a sophisticated approach to chess move prediction and game analysis.
+ChessFormer is a chess transformer engine developed by [@ncylich](https://github.com/ncylich) that leverages the power of transformer models trained on lichess datasets. Designed to simulate a player with an approximate Elo rating of ~1800, ChessFormer provides a sophisticated approach to chess move prediction and game analysis.
 
 ## Project Overview
 
@@ -14,6 +14,7 @@ ChessFormer uses extensive datasets from [lichess](https://lichess.org/), a popu
 - `inference.py`: Contains functions for model inference, including preprocessing and postprocessing.
 - `file_filter.cpp`: C++ script to filter chess games from PGN files based on Elo ratings.
 - `write_positions.py`: Python script to extract and record specific chess positions from games.
+- `models.zip`: The best model weights I could produce with my limited m1 pro setup.
 
 ## Setup and Requirements
 
@@ -47,6 +48,7 @@ Before running the scripts, ensure you have Python 3.x and a C++ compiler instal
 - **Notation Conversion**: Convert UCI notations to board positions using `chess_moves_to_input_data .py`.
 
 - **Running the Engine**: Perform model inference with `inference_test.py`, which includes both preprocessing of chess positions and postprocessing of the model's output.
+- **Playing Against Engine**: Run `play_against.py`. Must unzip `models.zip` first though.
 
 - **Filtering PGN Files**: Utilize the compiled `file_filter` program to filter games from PGN files based on specific Elo ratings.
 
