@@ -38,7 +38,7 @@ def sq_to_str(sq):
     """
     return chr(ord('a') + sq % 8) + str(8 - sq // 8)
 
-def postprocess_valid(output, board: chess.Board):
+def postprocess_valid(output, board: chess.Board, rep_mv=""):
     """
     Converts model output to a valid chess move.
     """
@@ -57,7 +57,7 @@ def postprocess_valid(output, board: chess.Board):
         mv_str = sq_to_str(mv[0][0]) + sq_to_str(mv[1][0])
         if not board.turn:
             mv_str = switch_move(mv_str, wht_turn=board.turn, normal_format=True)
-        if mv_str in legal_moves:
+        if mv_str in legal_moves and mv_str != rep_mv:
             print(f'Move: {mv_str} = {chess.Board.san(board, chess.Move.from_uci(mv_str))}')
             print('Completed in:', str(time.time() - start))
             return mv_str

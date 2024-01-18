@@ -63,21 +63,19 @@ while not (board.is_checkmate() or board.is_stalemate() or board.is_insufficient
     input_tensors = preprocess(board)
     count += 1
 
-    def predict_move():
+    def predict_move(rep_mv=""):
         with torch.no_grad():
             output = model(*input_tensors)
-        uci_mv = postprocess_valid(output, board)
+        uci_mv = postprocess_valid(output, board, rep_mv=rep_mv)
         return uci_mv
 
     uci_move = predict_move()
 
-    def repetition_draw(uci_mv):
-        tp_board = deepcopy(board)
-        tp_board.push(chess.Move.from_uci(uci_mv))
-        return tp_board.can_claim_threefold_repition()
-
-    while repetition_draw(uci_move):
-        uci_move = predict_move()
+    # avoiding 3-move repetition
+    temp_board = deepcopy(board)
+    temp_board.push(chess.Move.from_uci(uci_move))
+    if temp_board.can_claim_threefold_repition():
+        uci_move = predict_move(rep_mv=uci_move)
 
     # Prioritize checkmate move if available
     for move in board.legal_moves:
