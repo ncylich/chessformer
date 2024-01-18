@@ -71,12 +71,12 @@ while not (board.is_checkmate() or board.is_stalemate() or board.is_insufficient
 
     uci_move = predict_move()
 
-    def repetition_draw(uci_mv, brd: board):
-        tp_board = deepcopy(brd)
+    def repetition_draw(uci_mv):
+        tp_board = deepcopy(board)
         tp_board.push(chess.Move.from_uci(uci_mv))
         return tp_board.can_claim_threefold_repition()
 
-    while repetition_draw(uci_move, board):
+    while repetition_draw(uci_move):
         uci_move = predict_move()
 
     # Prioritize checkmate move if available
