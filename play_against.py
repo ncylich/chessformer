@@ -37,6 +37,7 @@ def get_player_move(board):
             board.push(move)
             made_moves.append(move.uci())
             break
+
     return board
 
 # Game Loop
@@ -61,9 +62,22 @@ while not (board.is_checkmate() or board.is_stalemate() or board.is_insufficient
     # AI's turn
     input_tensors = preprocess(board)
     count += 1
-    with torch.no_grad():
-        output = model(*input_tensors)
-    uci_move = postprocess_valid(output, board)
+
+    def predict_move():
+        with torch.no_grad():
+            output = model(*input_tensors)
+        uci_mv = postprocess_valid(output, board)
+        return uci_mv
+
+    uci_move = predict_move()
+
+    def repetition_draw(uci_mv, brd: board):
+        tp_board = deepcopy(brd)
+        tp_board.push(chess.Move.from_uci(uci_mv))
+        return tp_board.can_claim_threefold_repition()
+
+    while repetition_draw(uci_move, board):
+        uci_move = predict_move()
 
     # Prioritize checkmate move if available
     for move in board.legal_moves:
